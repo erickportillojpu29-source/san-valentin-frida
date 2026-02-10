@@ -8,145 +8,154 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --pink:#ff5c8a;
-  --red:#e63946;
-  --soft:#ffe1ec;
-  --text:#3a3a3a;
+:root {
+  --pink: #ff5c8a;
+  --soft-pink: #ffe1ec;
+  --red: #e63946;
+  --white: #ffffff;
+  --text: #3a3a3a;
 }
 
-*{box-sizing:border-box}
+* {
+  box-sizing: border-box;
+}
 
-body{
-  margin:0;
-  height:100vh;
-  overflow:hidden;
-  font-family:'Inter',sans-serif;
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
   background:
-    radial-gradient(circle at top,#fff 0%,var(--soft) 45%,#ff9ab8 100%);
-  display:flex;
-  justify-content:center;
-  align-items:center;
+    radial-gradient(circle at top, #ffffff 0%, var(--soft-pink) 45%, #ff9ab8 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
 }
 
-/* corazones flotando */
-body::before{
-  content:"💗 💖 💕 💞 💓";
-  position:absolute;
-  width:100%;
-  text-align:center;
-  top:15%;
-  font-size:3.5rem;
-  opacity:.07;
-  animation:float 12s linear infinite;
+/* corazones de fondo */
+body::before {
+  content: "💗 💖 💕 💞 💓";
+  position: absolute;
+  font-size: 3.5rem;
+  opacity: 0.07;
+  top: 12%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  animation: float 12s linear infinite;
 }
 
-@keyframes float{
-  from{transform:translateY(0)}
-  to{transform:translateY(-60px)}
+@keyframes float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-50px); }
 }
 
-.container{
-  width:100%;
-  max-width:440px;
-  padding:22px;
-  z-index:2;
+.container {
+  width: 100%;
+  max-width: 440px;
+  padding: 22px;
+  z-index: 2;
 }
 
-.card{
-  background:linear-gradient(180deg,#fff,#fff0f6);
-  border-radius:36px;
-  padding:34px 30px 36px;
-  text-align:center;
-  box-shadow:0 40px 100px rgba(255,92,138,.3);
-  animation:fadeUp 1s ease forwards;
+.card {
+  background: linear-gradient(180deg, #ffffff, #fff0f6);
+  border-radius: 34px;
+  padding: 34px 30px 36px;
+  box-shadow:
+    0 35px 90px rgba(255,92,138,.28),
+    inset 0 0 0 1px rgba(255,255,255,.85);
+  text-align: center;
+  animation: fadeUp 1s ease forwards;
 }
 
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(25px)}
-  to{opacity:1;transform:translateY(0)}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-h1{
-  margin:0;
-  color:var(--pink);
-  font-size:1.8rem;
-  font-weight:700;
+h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--pink);
 }
 
-.subtitle{
-  margin-top:8px;
-  font-size:.9rem;
-  color:#b85b76;
+.subtitle {
+  margin-top: 8px;
+  font-size: .9rem;
+  color: #b85b76;
 }
 
-/* FOTO */
-.hero{
-  margin-top:22px;
-  position:relative;
+/* FOTO PRINCIPAL */
+.hero-photo {
+  width: 100%;
+  margin-top: 22px;
+  border-radius: 26px;
+  object-fit: cover;
+  box-shadow: 0 22px 55px rgba(255,92,138,.35);
 }
 
-.hero img{
-  width:100%;
-  border-radius:26px;
-  box-shadow:0 25px 60px rgba(255,92,138,.45);
-  animation:photoGlow 4s ease-in-out infinite;
+/* TEXTO */
+.question {
+  margin-top: 28px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text);
 }
 
-@keyframes photoGlow{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.015)}
+/* BOTONES */
+.actions {
+  margin-top: 34px;
+  position: relative;
+  height: 72px;
 }
 
-.question{
-  margin-top:28px;
-  font-size:1.3rem;
-  font-weight:600;
-  color:var(--text);
+button {
+  border: none;
+  border-radius: 999px;
+  padding: 16px 36px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all .25s ease;
 }
 
-.actions{
-  margin-top:36px;
-  height:74px;
-  position:relative;
+button:active {
+  transform: scale(.95);
 }
 
-button{
-  border:none;
-  border-radius:999px;
-  padding:16px 36px;
-  font-size:1rem;
-  cursor:pointer;
-  transition:.25s;
+#yes {
+  background: linear-gradient(135deg, var(--red), var(--pink));
+  color: white;
+  box-shadow: 0 18px 42px rgba(230,57,70,.45);
 }
 
-button:active{transform:scale(.95)}
-
-#yes{
-  background:linear-gradient(135deg,var(--red),var(--pink));
-  color:#fff;
-  box-shadow:0 20px 45px rgba(230,57,70,.45);
+#yes:hover {
+  transform: translateY(-2px);
 }
 
-#no{
-  position:absolute;
-  right:0;
-  background:#fff;
-  color:#cc5b75;
-  box-shadow:0 8px 20px rgba(255,92,138,.25);
+#no {
+  background: #ffffff;
+  color: #cc5b75;
+  position: absolute;
+  right: 0;
+  box-shadow: 0 8px 20px rgba(255,92,138,.25);
 }
 
-.hidden{display:none}
+.hidden {
+  display: none;
+}
 
 /* FINAL */
-.final{
-  font-size:1.25rem;
-  font-weight:600;
-  line-height:1.6;
-  color:var(--text);
+.final {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.6;
 }
 
-.final span{color:var(--pink)}
+.final span {
+  color: var(--pink);
+}
 </style>
 </head>
 
@@ -155,11 +164,10 @@ button:active{transform:scale(.95)}
 <div class="container">
   <div class="card" id="main">
     <h1>Frida 💗</h1>
-    <div class="subtitle">Tengo algo importante que decirte…</div>
+    <div class="subtitle">Hay algo que quiero preguntarte…</div>
 
-    <div class="hero">
-      <img src="foto1.jpg.jpg" alt="Nosotros">
-    </div>
+    <!-- FOTO SIEMPRE VISIBLE -->
+    <img src="foto1.jpg.jpg" alt="Nosotros" class="hero-photo">
 
     <div class="question">
       ¿Quieres ser mi San Valentín? 💘
@@ -172,7 +180,11 @@ button:active{transform:scale(.95)}
   </div>
 
   <div class="card hidden" id="result">
-    <div class="final" id="finalText"></div>
+    <div class="final">
+      Entonces ya está decidido 💞<br><br>
+      Este San Valentín<br>
+      es solo para <span>nosotros</span>.
+    </div>
   </div>
 </div>
 
@@ -181,54 +193,39 @@ button:active{transform:scale(.95)}
 </audio>
 
 <script>
-const noBtn=document.getElementById("no");
-const yesBtn=document.getElementById("yes");
-const main=document.getElementById("main");
-const result=document.getElementById("result");
-const music=document.getElementById("music");
-const finalText=document.getElementById("finalText");
+const noBtn = document.getElementById('no');
+const yesBtn = document.getElementById('yes');
+const main = document.getElementById('main');
+const result = document.getElementById('result');
+const music = document.getElementById('music');
 
-let started=false;
-let distance=120;
+let musicStarted = false;
 
-function startMusic(){
-  if(started) return;
-  started=true;
-  music.volume=0;
-  music.play();
-  let v=0;
-  const fade=setInterval(()=>{
-    v+=0.02;
-    music.volume=Math.min(v,0.5);
-    if(v>=0.5) clearInterval(fade);
-  },120);
+function startMusic() {
+  if (!musicStarted) {
+    music.volume = 0.45;
+    music.play();
+    musicStarted = true;
+  }
 }
 
-function moveNo(){
-  distance+=20;
-  const x=Math.random()*distance-distance/2;
-  const y=Math.random()*90+10;
-  noBtn.style.transform=`translate(${x}px,${y}px)`;
+function moveNo() {
+  const x = Math.random() * 240 - 120;
+  const y = Math.random() * 90 + 10;
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
 }
 
-document.addEventListener("click",startMusic,{once:true});
-document.addEventListener("touchstart",startMusic,{once:true});
-noBtn.addEventListener("mouseover",moveNo);
-noBtn.addEventListener("touchstart",moveNo);
+document.addEventListener('click', startMusic, { once: true });
+document.addEventListener('touchstart', startMusic, { once: true });
 
-yesBtn.addEventListener("click",()=>{
-  music.volume=0.75;
-  main.classList.add("hidden");
-  result.classList.remove("hidden");
-  navigator.vibrate?.(200);
+noBtn.addEventListener('mouseover', moveNo);
+noBtn.addEventListener('touchstart', moveNo);
 
-  const msg="Entonces ya está decidido 💞\n\nEste San Valentín\nes solo para nosotros.";
-  let i=0;
-  const type=setInterval(()=>{
-    finalText.innerHTML+=msg[i]==="\n"?"<br>":msg[i];
-    i++;
-    if(i>=msg.length) clearInterval(type);
-  },55);
+yesBtn.addEventListener('click', () => {
+  startMusic();
+  main.classList.add('hidden');
+  result.classList.remove('hidden');
+  navigator.vibrate?.(150);
 });
 </script>
 
