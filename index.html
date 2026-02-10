@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Frida 💖</title>
+<title>San Valentín 💘</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --primary: #ff4d6d;
-  --text: #222;
-  --muted: #666;
-  --bg: #f7f7f9;
+  --pink: #ff5c8a;
+  --soft-pink: #ffd6e5;
+  --red: #e63946;
+  --white: #ffffff;
+  --text: #3a3a3a;
 }
 
 * {
@@ -21,68 +22,90 @@
 
 body {
   margin: 0;
-  background: radial-gradient(circle at top, #fff 0%, var(--bg) 60%);
-  height: 100vh;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  background:
+    radial-gradient(circle at top, #fff 0%, var(--soft-pink) 45%, #ff9ab8 100%);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+}
+
+/* corazones suaves de fondo */
+body::before {
+  content: "💗 💖 💕 💞 💓";
+  position: absolute;
+  font-size: 3rem;
+  opacity: 0.08;
+  top: 10%;
+  left: 5%;
+  right: 5%;
+  text-align: center;
+  animation: float 10s linear infinite;
+}
+
+@keyframes float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-40px); }
 }
 
 .container {
   width: 100%;
-  max-width: 420px;
-  padding: 24px;
+  max-width: 430px;
+  padding: 22px;
+  z-index: 2;
 }
 
 .card {
-  background: white;
-  border-radius: 28px;
-  padding: 34px 30px;
-  box-shadow: 0 30px 70px rgba(0,0,0,.1);
+  background: linear-gradient(180deg, #fff, #fff0f5);
+  border-radius: 32px;
+  padding: 36px 32px;
+  box-shadow:
+    0 30px 80px rgba(255,92,138,.25),
+    inset 0 0 0 1px rgba(255,255,255,.8);
   text-align: center;
-  animation: fadeIn 1s ease forwards;
+  animation: fadeUp 1s ease forwards;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(16px); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 h1 {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--primary);
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--pink);
 }
 
-p {
-  margin: 18px 0 0;
-  font-size: .95rem;
-  line-height: 1.6;
-  color: var(--muted);
+.subtitle {
+  margin-top: 10px;
+  font-size: .9rem;
+  color: #b85b76;
 }
 
 .question {
-  margin-top: 30px;
-  font-size: 1.15rem;
-  font-weight: 500;
+  margin-top: 32px;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: var(--text);
 }
 
 .actions {
-  margin-top: 32px;
+  margin-top: 36px;
   position: relative;
-  height: 64px;
+  height: 70px;
 }
 
 button {
   border: none;
   border-radius: 999px;
-  padding: 15px 30px;
-  font-size: .95rem;
+  padding: 16px 34px;
+  font-size: 1rem;
   cursor: pointer;
-  transition: transform .2s ease, box-shadow .2s ease;
+  transition: all .25s ease;
 }
 
 button:active {
@@ -90,16 +113,21 @@ button:active {
 }
 
 #yes {
-  background: linear-gradient(135deg, #ff4d6d, #ff758f);
+  background: linear-gradient(135deg, var(--red), var(--pink));
   color: white;
-  box-shadow: 0 14px 30px rgba(255,77,109,.45);
+  box-shadow: 0 18px 40px rgba(230,57,70,.45);
+}
+
+#yes:hover {
+  transform: translateY(-2px);
 }
 
 #no {
-  background: #f1f1f1;
-  color: #444;
+  background: #fff;
+  color: #cc5b75;
   position: absolute;
   right: 0;
+  box-shadow: 0 8px 18px rgba(255,92,138,.25);
 }
 
 .hidden {
@@ -107,10 +135,14 @@ button:active {
 }
 
 .final {
-  font-size: 1.15rem;
-  font-weight: 500;
+  font-size: 1.2rem;
+  font-weight: 600;
   color: var(--text);
   line-height: 1.6;
+}
+
+.final span {
+  color: var(--pink);
 }
 </style>
 </head>
@@ -119,27 +151,24 @@ button:active {
 
 <div class="container">
   <div class="card" id="main">
-    <h1>Frida</h1>
-    <p>
-      No voy a hacerlo largo ni cursi.<br>
-      Pero sí quiero preguntarte algo importante.
-    </p>
+    <h1>Frida 💗</h1>
+    <div class="subtitle">Tengo algo que preguntarte…</div>
 
     <div class="question">
-      ¿Quieres ser mi San Valentín?
+      ¿Quieres ser mi San Valentín? 💘
     </div>
 
     <div class="actions">
-      <button id="yes">Sí 💘</button>
+      <button id="yes">Sí, obvio 💖</button>
       <button id="no">No</button>
     </div>
   </div>
 
   <div class="card hidden" id="result">
     <div class="final">
-      Entonces quedó decidido 💖<br><br>
-      Prometo que este San Valentín<br>
-      será especial contigo.
+      Entonces ya está decidido 💞<br><br>
+      Este San Valentín<br>
+      es solo para <span>nosotros</span>.
     </div>
   </div>
 </div>
@@ -166,7 +195,7 @@ function startMusic() {
 }
 
 function moveNo() {
-  const x = Math.random() * 220 - 110;
+  const x = Math.random() * 240 - 120;
   const y = Math.random() * 90 + 10;
   noBtn.style.transform = `translate(${x}px, ${y}px)`;
 }
@@ -174,8 +203,8 @@ function moveNo() {
 document.addEventListener('click', startMusic, { once: true });
 document.addEventListener('touchstart', startMusic, { once: true });
 
-noBtn.addEventListener('touchstart', moveNo);
 noBtn.addEventListener('mouseover', moveNo);
+noBtn.addEventListener('touchstart', moveNo);
 
 yesBtn.addEventListener('click', () => {
   startMusic();
