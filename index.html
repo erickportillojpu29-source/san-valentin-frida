@@ -3,71 +3,100 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Frida 💖</title>
+<title>Frida</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
+:root {
+  --primary: #ff4d6d;
+  --text: #222;
+  --muted: #666;
+  --bg: #f7f7f9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
+  background: var(--bg);
   height: 100vh;
-  background: radial-gradient(circle at top, #ffd1dc, #ff8fab);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: 'Poppins', sans-serif;
-  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: 420px;
+  padding: 24px;
 }
 
 .card {
   background: white;
-  width: 90%;
-  max-width: 360px;
-  padding: 30px 25px;
-  border-radius: 24px;
+  border-radius: 28px;
+  padding: 32px 28px;
+  box-shadow: 0 30px 60px rgba(0,0,0,.08);
   text-align: center;
-  box-shadow: 0 20px 40px rgba(0,0,0,.15);
-  animation: intro 1s ease forwards;
+  animation: fadeIn .8s ease forwards;
 }
 
-@keyframes intro {
-  from { opacity: 0; transform: scale(.9) translateY(20px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 h1 {
-  color: #ff4d6d;
+  margin: 0;
+  font-size: 1.4rem;
   font-weight: 600;
+  color: var(--primary);
 }
 
 p {
-  color: #444;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  margin: 18px 0 0;
+  font-size: .95rem;
+  line-height: 1.6;
+  color: var(--muted);
 }
 
-h2 {
-  margin-top: 25px;
-  color: #222;
+.question {
+  margin-top: 28px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.actions {
+  margin-top: 28px;
+  position: relative;
 }
 
 button {
   border: none;
-  padding: 12px 22px;
-  border-radius: 30px;
-  font-size: 1rem;
+  border-radius: 999px;
+  padding: 14px 26px;
+  font-size: .95rem;
   cursor: pointer;
-  margin: 10px;
-  transition: all .2s ease;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+button:active {
+  transform: scale(.96);
 }
 
 #yes {
-  background: #ff4d6d;
+  background: var(--primary);
   color: white;
+  box-shadow: 0 10px 25px rgba(255,77,109,.35);
 }
 
 #no {
   background: #eee;
+  color: #444;
   position: absolute;
 }
 
@@ -75,90 +104,61 @@ button {
   display: none;
 }
 
-.music {
-  font-size: .75rem;
-  color: #777;
-  margin-top: 15px;
-}
-
-.heart {
-  position: fixed;
-  font-size: 22px;
-  animation: fall linear forwards;
-}
-
-@keyframes fall {
-  from { transform: translateY(-10vh); opacity: 1; }
-  to { transform: translateY(110vh); opacity: 0; }
+.final {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text);
 }
 </style>
 </head>
 
 <body>
 
-<div class="card" id="main">
-  <h1>Frida 💖</h1>
-  <p>
-    Ok, no voy a hacer esto dramático.<br>
-    Pero sí quiero preguntarte algo importante.
-  </p>
-  <h2>¿Quieres ser mi San Valentín?</h2>
-  <button id="yes">Sí 💕</button>
-  <button id="no">No 😅</button>
-  <div class="music">🎵 reproduciendo</div>
-</div>
+<div class="container">
+  <div class="card" id="main">
+    <h1>Frida</h1>
+    <p>
+      No voy a hacer esto largo ni dramático.<br>
+      Solo quiero preguntarte algo importante.
+    </p>
 
-<div class="card hidden" id="final">
-  <h1>✨ Sabía que dirías que sí ✨</h1>
-  <p>
-    Prometo hacerlo especial.<br>
-    Sin cursilerías exageradas…<br>
-    pero con muchas ganas ❤️
-  </p>
-</div>
+    <div class="question">
+      ¿Quieres ser mi San Valentín?
+    </div>
 
-<audio id="audio" loop>
-  <source src="https://cdn.pixabay.com/audio/2023/03/07/audio_8c6e6d6d6f.mp3" type="audio/mpeg">
-</audio>
+    <div class="actions">
+      <button id="yes">Sí</button>
+      <button id="no">No</button>
+    </div>
+  </div>
+
+  <div class="card hidden" id="result">
+    <div class="final">
+      Entonces quedó decidido 💘<br><br>
+      Prometo hacerlo especial.
+    </div>
+  </div>
+</div>
 
 <script>
-const audio = document.getElementById("audio");
-let started = false;
-
-document.body.addEventListener("click", () => {
-  if (!started) {
-    audio.play();
-    started = true;
-  }
-});
-
-const noBtn = document.getElementById("no");
-const phrases = ["¿Segura?", "Piénsalo 😌", "Mmm no creo", "Intenta otra vez"];
-let i = 0;
+const noBtn = document.getElementById('no');
+const yesBtn = document.getElementById('yes');
+const main = document.getElementById('main');
+const result = document.getElementById('result');
 
 function moveNo() {
-  noBtn.textContent = phrases[i % phrases.length];
-  i++;
-  noBtn.style.left = Math.random() * (window.innerWidth - 120) + "px";
-  noBtn.style.top = Math.random() * (window.innerHeight - 60) + "px";
+  const x = Math.random() * 200 - 100;
+  const y = Math.random() * 80 + 20;
+  noBtn.style.transform = `translate(${x}px, ${y}px)`;
 }
 
-noBtn.addEventListener("touchstart", moveNo);
-noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener('touchstart', moveNo);
+noBtn.addEventListener('mouseover', moveNo);
 
-document.getElementById("yes").addEventListener("click", () => {
-  document.getElementById("main").classList.add("hidden");
-  document.getElementById("final").classList.remove("hidden");
-  navigator.vibrate?.(200);
-  for (let j = 0; j < 25; j++) {
-    const h = document.createElement("div");
-    h.className = "heart";
-    h.textContent = "❤️";
-    h.style.left = Math.random() * 100 + "vw";
-    h.style.animationDuration = 2 + Math.random() * 3 + "s";
-    document.body.appendChild(h);
-    setTimeout(() => h.remove(), 5000);
-  }
+yesBtn.addEventListener('click', () => {
+  main.classList.add('hidden');
+  result.classList.remove('hidden');
+  navigator.vibrate?.(150);
 });
 </script>
 
