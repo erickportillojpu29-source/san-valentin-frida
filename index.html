@@ -1,134 +1,166 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Para Frida 💖</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Arial', sans-serif;
-      overflow: hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frida 💖</title>
 
-    .card {
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      text-align: center;
-      width: 90%;
-      max-width: 350px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-    h1 {
-      font-size: 1.5rem;
-      color: #ff4d6d;
-    }
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle at top, #ffd1dc, #ff8fab);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+}
 
-    p {
-      color: #444;
-      font-size: 1rem;
-      margin-bottom: 25px;
-    }
+.card {
+  background: white;
+  width: 90%;
+  max-width: 360px;
+  padding: 30px 25px;
+  border-radius: 24px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,.15);
+  animation: intro 1s ease forwards;
+}
 
-    button {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 30px;
-      font-size: 1rem;
-      cursor: pointer;
-      margin: 10px;
-    }
+@keyframes intro {
+  from { opacity: 0; transform: scale(.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
 
-    #yesBtn {
-      background: #ff4d6d;
-      color: white;
-    }
+h1 {
+  color: #ff4d6d;
+  font-weight: 600;
+}
 
-    #noBtn {
-      background: #ddd;
-      position: absolute;
-    }
+p {
+  color: #444;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
 
-    .hidden {
-      display: none;
-    }
+h2 {
+  margin-top: 25px;
+  color: #222;
+}
 
-    .heart {
-      position: fixed;
-      color: #ff4d6d;
-      font-size: 20px;
-      animation: fall 3s linear infinite;
-    }
+button {
+  border: none;
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 10px;
+  transition: all .2s ease;
+}
 
-    @keyframes fall {
-      0% { transform: translateY(-10vh); opacity: 1; }
-      100% { transform: translateY(110vh); opacity: 0; }
-    }
-  </style>
+#yes {
+  background: #ff4d6d;
+  color: white;
+}
+
+#no {
+  background: #eee;
+  position: absolute;
+}
+
+.hidden {
+  display: none;
+}
+
+.music {
+  font-size: .75rem;
+  color: #777;
+  margin-top: 15px;
+}
+
+.heart {
+  position: fixed;
+  font-size: 22px;
+  animation: fall linear forwards;
+}
+
+@keyframes fall {
+  from { transform: translateY(-10vh); opacity: 1; }
+  to { transform: translateY(110vh); opacity: 0; }
+}
+</style>
 </head>
+
 <body>
 
-  <div class="card" id="card">
-    <h1>Frida 💖</h1>
-    <p>
-      Desde que llegaste, todo se siente más bonito.<br>
-      Solo quiero preguntarte algo…
-    </p>
-    <h2>¿Quieres ser mi San Valentín? 💌</h2>
-    <button id="yesBtn">Sí 💕</button>
-    <button id="noBtn">No 😅</button>
-  </div>
+<div class="card" id="main">
+  <h1>Frida 💖</h1>
+  <p>
+    Ok, no voy a hacer esto dramático.<br>
+    Pero sí quiero preguntarte algo importante.
+  </p>
+  <h2>¿Quieres ser mi San Valentín?</h2>
+  <button id="yes">Sí 💕</button>
+  <button id="no">No 😅</button>
+  <div class="music">🎵 reproduciendo</div>
+</div>
 
-  <div class="card hidden" id="result">
-    <h1>💘 ¡Sabía que dirías que sí! 💘</h1>
-    <p>
-      Gracias por hacer mis días más bonitos, Frida.<br>
-      Te quiero muchísimo ❤️
-    </p>
-  </div>
+<div class="card hidden" id="final">
+  <h1>✨ Sabía que dirías que sí ✨</h1>
+  <p>
+    Prometo hacerlo especial.<br>
+    Sin cursilerías exageradas…<br>
+    pero con muchas ganas ❤️
+  </p>
+</div>
 
-  <script>
-    const noBtn = document.getElementById('noBtn');
-    const yesBtn = document.getElementById('yesBtn');
-    const card = document.getElementById('card');
-    const result = document.getElementById('result');
+<audio id="audio" loop>
+  <source src="https://cdn.pixabay.com/audio/2023/03/07/audio_8c6e6d6d6f.mp3" type="audio/mpeg">
+</audio>
 
-    noBtn.addEventListener('touchstart', moveButton);
-    noBtn.addEventListener('mouseover', moveButton);
+<script>
+const audio = document.getElementById("audio");
+let started = false;
 
-    function moveButton() {
-      const x = Math.random() * (window.innerWidth - 100);
-      const y = Math.random() * (window.innerHeight - 50);
-      noBtn.style.left = `${x}px`;
-      noBtn.style.top = `${y}px`;
-    }
+document.body.addEventListener("click", () => {
+  if (!started) {
+    audio.play();
+    started = true;
+  }
+});
 
-    yesBtn.addEventListener('click', () => {
-      card.classList.add('hidden');
-      result.classList.remove('hidden');
-      navigator.vibrate?.(200);
-      createHearts();
-    });
+const noBtn = document.getElementById("no");
+const phrases = ["¿Segura?", "Piénsalo 😌", "Mmm no creo", "Intenta otra vez"];
+let i = 0;
 
-    function createHearts() {
-      for (let i = 0; i < 30; i++) {
-        const heart = document.createElement('div');
-        heart.className = 'heart';
-        heart.innerText = '❤️';
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.animationDuration = 2 + Math.random() * 3 + 's';
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 5000);
-      }
-    }
-  </script>
+function moveNo() {
+  noBtn.textContent = phrases[i % phrases.length];
+  i++;
+  noBtn.style.left = Math.random() * (window.innerWidth - 120) + "px";
+  noBtn.style.top = Math.random() * (window.innerHeight - 60) + "px";
+}
+
+noBtn.addEventListener("touchstart", moveNo);
+noBtn.addEventListener("mouseover", moveNo);
+
+document.getElementById("yes").addEventListener("click", () => {
+  document.getElementById("main").classList.add("hidden");
+  document.getElementById("final").classList.remove("hidden");
+  navigator.vibrate?.(200);
+  for (let j = 0; j < 25; j++) {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.textContent = "❤️";
+    h.style.left = Math.random() * 100 + "vw";
+    h.style.animationDuration = 2 + Math.random() * 3 + "s";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 5000);
+  }
+});
+</script>
 
 </body>
 </html>
